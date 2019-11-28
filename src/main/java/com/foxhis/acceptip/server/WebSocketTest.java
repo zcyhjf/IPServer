@@ -1,5 +1,6 @@
 package com.foxhis.acceptip.server;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import org.apache.log4j.Logger;
@@ -46,6 +47,7 @@ public class WebSocketTest {
 	 */
 	@OnMessage
 	public void onMessage(String params,Session session){
+		JSONObject ipJson = (JSONObject) JSON.parse(params);
 		//获取服务端到客户端的通道
 		WebSocketTest webSocketTest = WebSocketMapUtil.get(session.getId());
 		logger.info("收到来自"+session.getId()+"的消息"+params);
