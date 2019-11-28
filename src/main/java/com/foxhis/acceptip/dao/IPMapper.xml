@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foxhis.acceptip.dao.IPMapper">
+    <resultMap id="BaseResultMap" type="com.foxhis.acceptip.entity.IP">
+        <id column="hotelid" jdbcType="VARCHAR" property="hotelid"/>
+        <id column="tenantid" jdbcType="VARCHAR" property="tenantid"/>
+        <result column="date" jdbcType="TIMESTAMP" property="date"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+    </resultMap>
+
+    <select id="getIpRecord" resultMap="BaseResultMap" parameterType="com.foxhis.acceptip.entity.IP">
+        SELECT hotelid,tenantid,date,ip FROM ip_record WHERE hotelid = #{hotelid} AND tenantid = #{tenantid}
+    </select>
+
+    <select id="getIpRecordCount" resultType="int" parameterType="com.foxhis.acceptip.entity.IP">
+        SELECT count(*) FROM ip_record WHERE hotelid = #{hotelid} AND tenantid = #{tenantid}
+    </select>
+
+    <insert id="addIP" parameterType="com.foxhis.acceptip.entity.IP">
+        insert into ip_record (hotelid,tenantid , date , ip)
+        VALUES (#{hotelid},#{tenantid}, #{date}, #{ip})
+    </insert>
+
+    <insert id="addChangeIpRecord" parameterType="java.util.Map">
+        insert into ip_change_record (hotelid,tenantid,oldip,newip,date )
+        VALUES (#{hotelid},#{tenantid}, #{oldip},#{newip},#{date})
+    </insert>
+
+    <update id="editIP" parameterType="com.foxhis.acceptip.entity.IP">
+        update ip_record
+        <set >
+            <if test="date != null ">
+                date = #{date},
+            </if>
+            <if test="ip != null and ip != ''">
+                ip = #{ip},
+            </if>
+        </set>
+        where hotelid = #{hotelid} AND tenantid = #{tenantid}
+    </update>
+</mapper>
