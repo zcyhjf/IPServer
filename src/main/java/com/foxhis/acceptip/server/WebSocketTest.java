@@ -29,6 +29,7 @@ public class WebSocketTest {
 		WebSocketMapUtil.put(session.getId(),this);
 		String remoteAddress = WebSocketMapUtil.getIP(session);
 		System.out.println("tenantid:"+tenantid+";hotelid:"+hotelid+";ip:"+remoteAddress);
+		System.out.println("当前在线"+WebSocketMapUtil.getValues().size());
 
 	}
 
@@ -40,6 +41,7 @@ public class WebSocketTest {
 		//从map中删除
 		WebSocketMapUtil.remove(session.getId());
 		logger.info("====== onClose:"+session.getId()+" ======");
+		System.out.println("当前在线"+WebSocketMapUtil.getValues().size());
 	}
 
 	/*
@@ -47,7 +49,9 @@ public class WebSocketTest {
 	 */
 	@OnMessage
 	public void onMessage(String params,Session session){
-		JSONObject ipJson = (JSONObject) JSON.parse(params);
+		if (params.length()>10){
+			JSONObject ipJson = (JSONObject) JSON.parse(params);
+		}
 		//获取服务端到客户端的通道
 		WebSocketTest webSocketTest = WebSocketMapUtil.get(session.getId());
 		logger.info("收到来自"+session.getId()+"的消息"+params);
